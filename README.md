@@ -82,6 +82,7 @@ python test_flaskr.py
 * Returns a list of categories
 * Example: `curl http://localhost:5000/categories`
 
+```
 {
   "categories": {
     "1": "Science",
@@ -93,11 +94,12 @@ python test_flaskr.py
   },
   "success": true
 }
-
+```
 ### GET /questions
 * Get a list of questions paginated in groups of 10 with categories and answers
 * Example: `curl http://127.0.0.1:5000/questions`
 
+```
 {
   "categories": {
     "1": "Science",
@@ -182,11 +184,13 @@ python test_flaskr.py
   "success": true,
   "total_questions": 20
 }
+```
 
 ### GET /categories/int:id/questions
 * Returns questions based on Category id
 * Example `curl http://localhost:5000/categories/5/questions`
 
+```
 {
   "current_category": "Entertainment",
   "questions": [
@@ -222,6 +226,7 @@ python test_flaskr.py
   "success": true,
   "total_questions": 20
 }
+```
 
 ### POST /questions
 * Create a new question with :
@@ -230,6 +235,7 @@ python test_flaskr.py
     * Category
 * Example: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"What is the real name of the main protagonist in the netflix show LUPIN", "answer": "Omar Sy","category" :"5", "difficulty":"3"}'`
 
+```
 {
       "answer": "Omar Sy",
       "category": 5,
@@ -240,11 +246,13 @@ python test_flaskr.py
 ],
   "success": true,
   "total_questions": 21
+```
 
 ### POST /questions/search
 * Search questions with searchTerm
 * Example: ` curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm": "tom"}'`
 
+```
 {
   "current_category": null,
   "questions": [
@@ -259,11 +267,14 @@ python test_flaskr.py
   "success": true,
   "total_questions": 1
 }
+```
 
 ### DELETE /questions/int:question_id
 * Deletes a question by id
 
 * Example: `curl http://127.0.0.1:5000/questions/6 -X DELETE`
+
+```
 {
   "deleted": 6,
   "questions": [
@@ -274,12 +285,14 @@ python test_flaskr.py
   "success": true,
   "total_questions": 20
 }
+```
 
 ### POST /quizzes
 * Play the quiz game
 * Retrieve the question and its category
 * Example: `curl http://127.0.0.1:5000/quizzes -X POST -H "Content-Type: application/json" -d '{"quiz_category":{"type":"Entertainment","id":"5"}, "previous_questions":[7]}'`
 
+```
 {
   "question": {
     "answer": "Omar Sy",
@@ -290,14 +303,17 @@ python test_flaskr.py
   },
   "success": true
 }
+```
 
 ## Error Handling
 * Errors are returned as JSON in the following format:
+```
 {
   "error": 405,
   "message": "Method not allowed",
   "success": false
 }
+```
 * Types of Errors:
     * 400 - Bad request
     * 404 - Resource not found
