@@ -120,40 +120,27 @@ def create_app(test_config=None):
 
         new_question = body.get("question", None)
         new_answer = body.get("answer", None)
-        new_difficulty = body.get("difficulty", None)
         new_category = body.get("category", None)
+        new_difficulty = body.get("difficulty", None)
         search = body.get("searchTerm", None)
 
         try:
-            if search:
-                selection = Question.query.order_by(Question.id).filter(
-                    Question.title.ilike("%{}%".format(search))
-                )
-                current_questions = paginate_questions(request, selection)
-           
-                return jsonify(
-                    {
-                        "success": True,
-                        "questions": current_questions,
-                        "total_questions": len(Question.query.all()),
-                    }
-                )
-            else:
-                question = Question(question=new_question, answer=new_answer, category=new_category, difficulty=new_difficulty)
-                question.insert()
+            
+            question = Question(question=new_question, answer=new_answer, category=new_category, difficulty=new_difficulty)
+            question.insert()
 
-                selection = Question.query.order_by(Question.id).all()
-                current_questions = paginate_questions(request, selection)
+            selection = Question.query.order_by(Question.id).all()
+            current_questions = paginate_questions(request, selection)
 
-                return jsonify(
-                    {
-                        "success": True,
-                        "created": question.id,
-                        "question_created": question.question,
-                        "questions": current_questions,
-                        "total_questions": len(Question.query.all()),
-                    }
-                )
+            return jsonify(
+                {
+                    "success": True,
+                    "created": question.id,
+                    "question_created": question.question,
+                    "questions": current_questions,
+                    "total_questions": len(Question.query.all()),
+                }
+            )
         except:
             abort(422)
    
@@ -206,24 +193,26 @@ def create_app(test_config=None):
     def get_quiz():
         try:
             body = request.get_json()
-            previous_questions = body.get('previous_questions', None)
-            quiz_category = body.get('quiz_category', None)
-            category_id = quiz_category['id']
+            
+            previous = body.get("previous_questions", None)
+            quiz_category = body.get("quiz_category", None)
+           
 
-            if category_id == 0:
-                questions = Question.query.filter(
-                    Question.id.notin_(previous_questions)).all()
+            if quiz_category["id"] == 0:
+                questions = Question.query.all()
             else:
-                questions = Question.query.filter(
-                    Question.id.notin_(previous_questions),
-                    Question.category == category_id).all()
+                questions = Question.query.filter_by(
+                    category = quiz_category['id']).all()
             question = None
-            if(questions):
-                question = random.choice(questions)
+            
+            if(len(previous) < 1):
+                question = questions[0].format()
+            else:
+                question = random.choice(questions).format()
 
             return jsonify({
-                'success': True,
-                'question': question.format()
+                "success": True,
+                "question": question
             })
 
         except Exception:
